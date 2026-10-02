@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agentic AI Payment Assistant</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="assets/logo.svg" alt="Agentic Pay" />
+          <div><strong>Agentic Pay</strong><span>AI payment ops</span></div>
+        </div>
+        <button class="primary-btn" id="newChatBtn">+ New chat</button>
+        <div class="nav-section">
+          <p>Workspace</p>
+          <button class="nav-item active" data-tab-jump="chat">Assistant</button>
+          <button class="nav-item" data-tab-jump="dashboard">Dashboard</button>
+          <button class="nav-item" data-tab-jump="approvals">Approvals</button>
+          <button class="nav-item" data-tab-jump="invoices">Invoices</button>
+        </div>
+        <div class="nav-section">
+          <p>Quick actions</p>
+          <button class="nav-item quick" data-prompt="Pay INR 500 to Rahul">Pay</button>
+          <button class="nav-item quick" data-prompt="Show my spending this month">Analyze Spending</button>
+          <button class="nav-item quick" data-prompt="Create weekly recurring payment of INR 750 to Workspace Tools">Recurring Payments</button>
+          <button class="nav-item quick" data-prompt="Generate invoice for INR 3500 to Acme Labs">Generate Invoice</button>
+          <button class="nav-item quick" data-prompt="Transfer INR 20,000 to unknown account">Fraud Alerts</button>
+          <button class="nav-item quick" data-prompt="Add INR 5000 to wallet">Top Up Wallet</button>
+        </div>
+        <button class="theme-toggle" id="themeToggle">Toggle theme</button>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <h1>AI Payment Assistant</h1>
+            <p>Simulated payments, live risk checks, wallet controls, and approval-first workflows.</p>
+          </div>
+          <div class="status-pill"><span></span> Demo mode</div>
+        </header>
+
+        <nav class="tabbar" aria-label="Payment workspace sections">
+          <button class="tab-btn active" data-tab="chat">Chat</button>
+          <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+          <button class="tab-btn" data-tab="approvals">Approvals</button>
+          <button class="tab-btn" data-tab="transactions">Transactions</button>
+          <button class="tab-btn" data-tab="analytics">Analytics</button>
+          <button class="tab-btn" data-tab="invoices">Invoices</button>
+          <button class="tab-btn" data-tab="activity">Activity</button>
+        </nav>
+
+        <section class="tab-panel active" id="tab-chat">
+          <div class="chat-status-strip">
+            <span>Wallet <strong id="chatWalletBalance">&#8377;25,000</strong></span>
+            <span>Approvals <strong id="chatApprovalCount">0</strong></span>
+            <span><i></i> Demo mode</span>
+          </div>
+          <div class="messages" id="messages">
+            <div class="message assistant">
+              <div class="avatar">AI</div>
+              <div class="bubble">
+                I am ready to simulate payments, approvals, invoices, recurring transfers, wallet top-ups, and spending insights. Try one of the demo actions on the left.
+              </div>
+            </div>
+          </div>
+          <div class="tool-strip" id="toolStrip"></div>
+          <form class="composer" id="chatForm">
+            <input id="chatInput" autocomplete="off" placeholder="Ask to pay, top up wallet, analyze, approve, or generate an invoice..." />
+            <button type="submit">Send</button>
+          </form>
+        </section>
+
+        <section class="tab-panel" id="tab-dashboard">
+          <section class="hero-metrics dashboard-metrics">
+            <div class="metric-card accent">
+              <span>Wallet</span>
+              <strong id="walletBalance">&#8377;25,000</strong>
+              <button class="mini-btn" data-open-topup>Add Money</button>
+            </div>
+            <div class="metric-card">
+              <span>Monthly spend</span>
+              <strong id="monthlySpend">&#8377;0</strong>
+            </div>
+            <div class="metric-card">
+              <span>Pending approvals</span>
+              <strong id="approvalCount">0</strong>
+            </div>
+          </section>
+          <div class="dashboard-grid">
+            <section class="panel-block wallet-card">
+              <div class="section-head"><h2>Wallet Overview</h2><span id="walletCurrency">INR</span></div>
+              <div class="wallet-visual">
+                <div class="wallet-ring"><strong id="walletMini">&#8377;25,000</strong><span>available</span></div>
+              </div>
+              <button class="primary-btn full-width" data-open-topup>Add Money</button>
+            </section>
+            <section class="panel-block chart-card">
+              <div class="section-head"><h2>Spending Mix</h2><span>Live</span></div>
+              <div class="chart-frame">
+                <canvas id="categoryChart" height="160"></canvas>
+              </div>
+            </section>
+            <section class="panel-block">
+              <div class="section-head"><h2>Recent Transactions</h2><span id="txnCount">0</span></div>
+              <div class="timeline compact" id="transactions"></div>
+            </section>
+            <section class="panel-block">
+              <div class="section-head"><h2>Pending Approvals</h2><span id="approvalPanelCount">0</span></div>
+              <div class="approval-list compact" id="approvalList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-approvals">
+          <div class="panel-block fill-panel">
+            <div class="section-head"><h2>Pending Approvals</h2><span>Review queue</span></div>
+            <div class="approval-list" id="approvalListFull"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-transactions">
+          <div class="panel-block fill-panel">
+            <div class="section-head"><h2>Transaction Timeline</h2><span>Simulated rails</span></div>
+            <div class="timeline" id="transactionsFull"></div>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-analytics">
+          <div class="dashboard-grid">
+            <section class="panel-block chart-card">
+              <div class="section-head"><h2>Category Breakdown</h2><span>Spend only</span></div>
+              <div class="chart-frame chart-frame-large">
+                <canvas id="categoryChartLarge" height="220"></canvas>
+              </div>
+            </section>
+            <section class="panel-block">
+              <div class="section-head"><h2>AI Recommendations</h2><span>Budget advisor</span></div>
+              <div class="recommendations bounded-list" id="recommendations"></div>
+            </section>
+            <section class="panel-block wide">
+              <div class="section-head"><h2>Fraud Insights</h2><span>Risk monitor</span></div>
+              <div class="timeline bounded-list" id="fraudInsights"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-invoices">
+          <div class="invoice-layout">
+            <section class="panel-block invoice-list-panel">
+              <div class="section-head"><h2>Generated Invoices</h2><span>Demo billing</span></div>
+              <div class="invoice-list" id="invoiceList"></div>
+            </section>
+            <section class="panel-block invoice-preview-panel">
+              <div class="section-head"><h2>Invoice Preview</h2><span>Simulated</span></div>
+              <div class="invoice-preview" id="invoicePreview"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-activity">
+          <div class="panel-block fill-panel">
+            <div class="section-head"><h2>Agent Activity</h2><span>Audit stream</span></div>
+            <div class="activity-log" id="activityLog"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="approval-modal" id="approvalModal">
+      <div class="modal-body">
+        <h2>Approval Required</h2>
+        <p id="approvalText">A simulated transfer needs approval.</p>
+        <div class="modal-actions">
+          <button id="rejectApproval" class="ghost-btn">Reject</button>
+          <button id="approveApproval" class="primary-btn">Approve</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="approval-modal" id="topUpModal">
+      <form class="modal-body" id="topUpForm">
+        <h2>Add Demo Money</h2>
+        <p>Credit simulated funds to this wallet. No real money is moved.</p>
+        <div class="preset-grid">
+          <button type="button" class="preset-btn" data-amount="1000">&#8377;1,000</button>
+          <button type="button" class="preset-btn" data-amount="5000">&#8377;5,000</button>
+          <button type="button" class="preset-btn" data-amount="10000">&#8377;10,000</button>
+        </div>
+        <label class="field-label" for="topUpAmount">Custom amount</label>
+        <input id="topUpAmount" type="number" min="1" max="100000" step="1" placeholder="5000" />
+        <div class="modal-actions">
+          <button type="button" class="ghost-btn" id="closeTopUp">Cancel</button>
+          <button type="submit" class="primary-btn">Add Money</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast-stack" id="toasts"></div>
+    <script src="state.js"></script>
+    <script src="api.js"></script>
+    <script src="charts.js"></script>
+    <script src="ui.js"></script>
+    <script src="websocket.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
